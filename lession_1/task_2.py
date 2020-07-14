@@ -8,3 +8,16 @@
 --- b'class' - используйте маркировку b''
 --- используйте списки и циклы, не дублируйте функции
 """
+
+
+def to_bytes(string):
+    """all to bytes"""
+    return bytes(string, encoding="utf_8")
+
+
+STR = ["class", "function", "method"]
+
+for i in STR:
+    print(to_bytes(i))
+    print(type(to_bytes(i)))
+    print(len(to_bytes(i)))
