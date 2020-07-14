@@ -21,3 +21,7 @@ for i in STR:
     print(to_bytes(i))
     print(type(to_bytes(i)))
     print(len(to_bytes(i)))
+
+"""
+Тут не было в задании что нужно использовать b'', только совет, и bytes тоже вроде не запрещали
+"""
