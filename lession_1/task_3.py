@@ -8,32 +8,27 @@
 """
 
 
-# def to_bytes(strings):
-#     """all to bytes"""
-#     return bytes(strings, encoding="utf_8")
-#
-#
+def to_bytes(string):
+    """all to bytes"""
+    return bytes(string, encoding="utf_8")
+
+
 STR = ["attribute", "класс", "функция", "type"]
-#
-# for i in STR:
-#     print(to_bytes(i))
-#     print(type(to_bytes(i)))
-#     # print(b"%r" % i)  # Или так, но там кавычки лишние вылезают, что не айс
+
+for i in STR:
+    print(to_bytes(i))
+    print(type(to_bytes(i)))
+    # print(b"%r" % i)  # Или так, но там кавычки лишние вылезают, что не айс
 
 """
 C bytes все работает, но это ж неправильно, не по заданию )
-C b'' и eval можно вс. И на обработку ошибок ему что-то пофиг (
+C b'' я фиг знаю как по другому сделать. И на обработку ошибок ему что-то пофиг (
 """
 
-def to_bytes2(string):
-    """all to bytes"""
-    return eval(b"string")
-
-
-for i in STR:
-    print(to_bytes2(i))
-    print(type(to_bytes2(i)))
-
-
-
-
+# try:
+#     STR_1 = b"attribute"
+#     STR_2 = b"класс"  # <--- Это
+#     STR_3 = b"функция"  # <--- И это
+#     STR_4 = b"type"
+# except SyntaxError:
+#     print("Everything is lost")
