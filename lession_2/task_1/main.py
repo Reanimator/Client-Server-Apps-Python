@@ -37,25 +37,32 @@ os_code_list, os_type_list. В этой же функции создать гл�
 ПРОШУ ВАС НЕ УДАЛЯТЬ СЛУЖЕБНЫЕ ФАЙЛЫ TXT И ИТОГОВЫЙ ФАЙЛ CSV!!!
 """
 
-from chardet.universaldetector import UniversalDetector
 import re
+import csv
+from chardet.universaldetector import UniversalDetector
 
 
-def write_to_csv():
-    pass
+def write_to_csv(files):
+    """write to csv file"""
+    with open(files, 'w', encoding='utf8') as file:
+        f_n_writer = csv.writer(file)
+        for row in get_data():
+            f_n_writer.writerow(row)
 
 
 def get_data():
+    """get data from files"""
     main_data = [[
-        "",
-        "Изготовитель системы:",
-        "Название ОС:",
-        "Код продукта:",
-        "Тип системы:"]]
+        "Номер по порядку",
+        "Изготовитель системы",
+        "Название ОС",
+        "Код продукта",
+        "Тип системы"]]
     os_list = []
-    for files in FILE_LIST:
+    for files in range(3):
+        os_list.append(files + 1)
         for data_number in range(1, 5):
-            with open(files, encoding=detect(files)) as file:
+            with open(FILE_LIST[files], encoding=detect(FILE_LIST[files])) as file:
                 for string in file:
                     match = search_match(data_number, string, main_data)
                     if match is not None:
@@ -78,7 +85,8 @@ def detect(files):
 
 
 def search_match(text_number, string, main_data):
-    match = re.search(main_data[0][text_number] + r'\s+', string)
+    """search match in files"""
+    match = re.search(main_data[0][text_number] + r':\s+', string)
     if match is not None:
         return string[match.end():-1]
 
@@ -88,7 +96,4 @@ FILE_LIST = [
     "info_2.txt",
     "info_3.txt"]
 
-print(get_data())
-
-
-
+write_to_csv("my_data_report.csv")
