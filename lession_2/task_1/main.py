@@ -63,7 +63,7 @@ def get_data():
         "Код продукта",
         "Тип системы"]]
     os_list = []
-    for files in range(3):
+    for files in range(len(FILE_LIST)):
         os_list.append(files + 1)
         for data_number in range(1, 5):
             with open(FILE_LIST[files], encoding=detect(FILE_LIST[files])) as file:
