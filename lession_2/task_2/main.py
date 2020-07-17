@@ -38,3 +38,19 @@
 и достучаться до списка, который и нужно пополнять
 а потом сохранять все в файл
 """
+
+import json
+
+
+def write_order_to_json(item, quantity, price, buyer, date):
+    with open('mein_orders.json') as file:
+        OBJ = json.load(file)
+        OBJ['orders'].append({"item": item, "quantity": quantity, "price": price, "buyer": buyer, "date": date})
+    with open('mein_orders.json', 'w') as file:
+        json.dump(OBJ, file, indent=4)
+
+
+ORDER = ["printer", "20", "6700", "Petrov P.P.", "24.09.2017"]
+"""Тут может быть ваша реклама, шутка, тут может быть ввод с клавиатуры или любой другой способ как ввести информацию"""
+
+write_order_to_json(ORDER[0], ORDER[1], ORDER[2], ORDER[3], ORDER[4])
