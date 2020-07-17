@@ -7,29 +7,10 @@
 --- Попробуйте усложнить задачу, "отлавливая" и обрабатывая исключение
 """
 
-
-def to_bytes(string):
-    """all to bytes"""
-    return bytes(string, encoding="utf_8")
-
-
 STR = ["attribute", "класс", "функция", "type"]
 
 for i in STR:
-    print(to_bytes(i))
-    print(type(to_bytes(i)))
-    # print(b"%r" % i)  # Или так, но там кавычки лишние вылезают, что не айс
-
-"""
-C bytes все работает, но это ж неправильно, не по заданию )
-C b'' я фиг знаю как по другому сделать. И на обработку ошибок ему что-то пофиг.
-Как прикрутить eval() что-то не дошло (
-"""
-
-# try:
-#     STR_1 = b"attribute"
-#     STR_2 = b"класс"  # <--- Это
-#     STR_3 = b"функция"  # <--- И это
-#     STR_4 = b"type"
-# except SyntaxError:
-#     print("Everything is lost")
+    try:
+        print(bytes(i, encoding='ascii'))
+    except UnicodeEncodeError:
+        print("Слово %s невозможно записать в виде байтовой строки" % i)
