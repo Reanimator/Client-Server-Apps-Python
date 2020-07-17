@@ -15,13 +15,21 @@ def to_bytes(string):
     return bytes(string, encoding="utf_8")
 
 
-STR = ["class", "function", "method"]
+STR_1 = ["class", "function", "method"]
 
-for i in STR:
+for i in STR_1:
     print(to_bytes(i))
     print(type(to_bytes(i)))
     print(len(to_bytes(i)))
 
 """
 Тут не было в задании что нужно использовать b'', только совет, и bytes тоже вроде не запрещали
+Сделал с b' '
 """
+
+STR_2 = [b"class", b"function", b"method"]
+
+for i in STR_2:
+    print(i)
+    print(type(i))
+    print(len(i))
