@@ -1,0 +1,11 @@
+items:
+- computer
+- printer
+- keyboard
+- mouse
+items_price:
+  computer: 200-500€
+  keyboard: 50-100₩
+  mouse: 10-50₿
+  printer: 100-200₡
+items_quantity: 4
