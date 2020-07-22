@@ -40,7 +40,9 @@ def process_ans(message):
 
 
 def main():
-    '''Загружаем параметы коммандной строки'''
+    '''
+    Загружаем параметы коммандной строки
+    '''
     # client.py 192.168.1.2 8079
     try:
         server_address = sys.argv[1]
@@ -51,7 +53,8 @@ def main():
         server_address = DEFAULT_IP_ADDRESS
         server_port = DEFAULT_PORT
     except ValueError:
-        print('В качестве порта может быть указано только число в диапазоне от 1024 до 65535.')
+        print(
+            'В качестве порта может быть указано только число в диапазоне от 1024 до 65535.')
         sys.exit(1)
 
     # Инициализация сокета и обмен

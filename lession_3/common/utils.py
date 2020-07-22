@@ -3,6 +3,7 @@
 import json
 from common.variables import MAX_PACKAGE_LENGTH, ENCODING
 
+
 def get_message(client):
     '''
     Утилита приёма и декодирования сообщения
