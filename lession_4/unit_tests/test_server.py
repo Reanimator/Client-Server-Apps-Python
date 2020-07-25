@@ -32,6 +32,11 @@ class TestServer(unittest.TestCase):
         self.assertEqual(process_client_message(
             {ACTION: PRESENCE, USER: {ACCOUNT_NAME: 'Guest'}}), self.err_dict)
 
+    def test_wrong_time(self):
+        """Ошибка, если формат времени не верен"""
+        self.assertEqual(process_client_message(
+            {ACTION: PRESENCE, TIME: 'abc', USER: {ACCOUNT_NAME: 'Guest'}}), self.err_dict)
+
     def test_no_user(self):
         """Ошибка - нет пользователя"""
         self.assertEqual(process_client_message(
