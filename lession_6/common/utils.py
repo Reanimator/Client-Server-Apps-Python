@@ -1,9 +1,11 @@
 """Утилиты"""
 
 import json
+from logs.configs.decors import log_inspector
 from common.variables import MAX_PACKAGE_LENGTH, ENCODING
 
 
+@log_inspector
 def get_message(client):
     '''
     Утилита приёма и декодирования сообщения
@@ -22,6 +24,7 @@ def get_message(client):
     raise ValueError
 
 
+@log_inspector
 def send_message(sock, message):
     '''
     Утилита кодирования и отправки сообщения

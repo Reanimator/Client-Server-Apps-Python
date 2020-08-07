@@ -4,7 +4,7 @@ import socket
 import sys
 import json
 import logging
-import logs.configs.config_server_log
+from logs.configs.decors import log_inspector
 from common.variables import ACTION, ACCOUNT_NAME, RESPONSE, MAX_CONNECTIONS, \
     PRESENCE, TIME, USER, ERROR, DEFAULT_PORT
 from common.utils import get_message, send_message
@@ -12,6 +12,7 @@ from common.utils import get_message, send_message
 LOGGER_SERVER = logging.getLogger('messenger.server')
 
 
+@log_inspector
 def process_client_message(message):
     '''
     Обработчик сообщений от клиентов, принимает словарь -
@@ -33,7 +34,7 @@ def process_client_message(message):
         ERROR: 'Bad Request'
     }
 
-
+@log_inspector
 def main():
     '''
     Загрузка параметров командной строки, если нет параметров, то задаём значения по умоланию.

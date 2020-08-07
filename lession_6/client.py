@@ -5,7 +5,7 @@ import json
 import socket
 import time
 import logging
-import logs.configs.config_client_log
+from logs.configs.decors import log_inspector
 from common.variables import ACTION, PRESENCE, TIME, USER, ACCOUNT_NAME, \
     RESPONSE, ERROR, DEFAULT_IP_ADDRESS, DEFAULT_PORT
 from common.utils import get_message, send_message
@@ -14,6 +14,7 @@ from common.utils import get_message, send_message
 LOGGER_CLIENT = logging.getLogger('messenger.client')
 
 
+@log_inspector
 def create_presence(account_name='Guest'):
     '''
     Функция генерирует запрос о присутствии клиента
@@ -32,6 +33,7 @@ def create_presence(account_name='Guest'):
     return out
 
 
+@log_inspector
 def process_ans(message):
     '''
     Функция разбирает ответ сервера
@@ -51,7 +53,7 @@ def process_ans(message):
             return 'Неизвестный код'
     raise ValueError
 
-
+@log_inspector
 def main():
     '''
     Загружаем параметы коммандной строки
