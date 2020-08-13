@@ -1,8 +1,11 @@
 """Утилиты"""
 
 import json
+import sys
 from logs.configs.decors import log_inspector
+from errors import IncorrectDataRecivedError, NonDictInputError
 from common.variables import MAX_PACKAGE_LENGTH, ENCODING
+sys.path.append('../')
 
 
 @log_inspector
@@ -20,8 +23,8 @@ def get_message(client):
         response = json.loads(json_response)
         if isinstance(response, dict):
             return response
-        raise ValueError
-    raise ValueError
+        raise IncorrectDataRecivedError
+    raise IncorrectDataRecivedError
 
 
 @log_inspector
@@ -34,6 +37,8 @@ def send_message(sock, message):
     :return:
     '''
 
+    if not isinstance(message, dict):
+        raise NonDictInputError
     js_message = json.dumps(message)
     encoded_message = js_message.encode(ENCODING)
     sock.send(encoded_message)
