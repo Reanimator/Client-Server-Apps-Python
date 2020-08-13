@@ -1,11 +1,9 @@
 """Утилиты"""
 
 import json
-import sys
 from logs.configs.decors import log_inspector
 from errors import IncorrectDataRecivedError, NonDictInputError
 from common.variables import MAX_PACKAGE_LENGTH, ENCODING
-sys.path.append('../')
 
 
 @log_inspector

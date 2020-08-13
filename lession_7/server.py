@@ -16,15 +16,15 @@ LOGGER_SERVER = logging.getLogger('messenger.server')
 
 @log_inspector
 def process_client_message(message, messages_list, client):
-    '''
-    Обработчик сообщений от клиентов, принимает словарь -
-    сообщение от клинта, проверяет корректность,
-    возвращает словарь-ответ для клиента
-
+    """
+    Обработчик сообщений от клиентов, принимает словарь - сообщение от клинта,
+    проверяет корректность, отправляет словарь-ответ для клиента с результатом приёма.
     :param message:
+    :param messages_list:
+    :param client:
     :return:
-    '''
-    LOGGER_SERVER.debug(f'Принято сообщение от клиента: {message}')
+    """
+    LOGGER_SERVER.debug(f'Разбор сообщения от клиента : {message}')
     if ACTION in message and message[ACTION] == PRESENCE and TIME in message \
             and USER in message and message[USER][ACCOUNT_NAME] == 'Guest':
         send_message(client, {RESPONSE: 200})
@@ -53,31 +53,23 @@ def arg_parser():
     if not 1023 < listen_port < 65536:
         LOGGER_SERVER.critical(f'Запуска сервера с неподходящим портом {listen_port}. Допустимы с 1024 до 65535.')
         sys.exit(1)
+
     return listen_address, listen_port
 
 
 @log_inspector
 def main():
-    '''
-    Загрузка параметров командной строки, если нет параметров, то задаём значения по умоланию.
-    Сначала обрабатываем порт:
-    server.py -p 8079 -a 192.168.1.2
-    :return:
-    '''
+    """Загрузка параметров командной строки, если нет параметров, то задаём значения по умоланию"""
     listen_address, listen_port = arg_parser()
-    LOGGER_SERVER.info(
-        f'Запущен сервер, порт для подключений: {listen_port}, '
-        f'адрес с которого принимаются подключения: {listen_address}. '
-        f'Если адрес не указан, принимаются соединения с любых адресов.')
+    LOGGER_SERVER.info(f'Запущен сервер, с портом: {listen_port} и адресом: {listen_address}.')
+    print("Режим работы - сервер")
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     transport.bind((listen_address, listen_port))
-    transport.settimeout(0.5)
+    transport.settimeout(0.1)
     clients = []
     messages = []
     transport.listen(MAX_CONNECTIONS)
-    # Основной цикл программы сервера
     while True:
-        # Ждём подключения, если таймаут вышел, ловим исключение.
         try:
             client, client_address = transport.accept()
         except OSError:
@@ -85,30 +77,22 @@ def main():
         else:
             LOGGER_SERVER.info(f'Установлено соедение с ПК {client_address}')
             clients.append(client)
-
         recv_data_lst = []
         send_data_lst = []
         err_lst = []
-        # Проверяем на наличие ждущих клиентов
         try:
             if clients:
                 recv_data_lst, send_data_lst, err_lst = select.select(clients, clients, [], 0)
         except OSError:
             pass
-
-        # принимаем сообщения и если там есть сообщения,
-        # кладём в словарь, если ошибка, исключаем клиента.
         if recv_data_lst:
             for client_with_message in recv_data_lst:
                 try:
                     process_client_message(get_message(client_with_message),
                                            messages, client_with_message)
                 except:
-                    LOGGER_SERVER.info(f'Клиент {client_with_message.getpeername()} '
-                                f'отключился от сервера.')
+                    LOGGER_SERVER.info(f'Клиент {client_with_message.getpeername()} отключился от сервера.')
                     clients.remove(client_with_message)
-
-        # Если есть сообщения для отправки и ожидающие клиенты, отправляем им сообщение.
         if messages and send_data_lst:
             message = {
                 ACTION: MESSAGE,

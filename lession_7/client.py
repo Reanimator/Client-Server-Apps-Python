@@ -4,13 +4,13 @@ import sys
 import json
 import socket
 import time
-import argparse
 import logging
+import argparse
 from logs.configs.decors import log_inspector
-from common.variables import DEFAULT_PORT, DEFAULT_IP_ADDRESS, \
-    ACTION, TIME, USER, ACCOUNT_NAME, SENDER, PRESENCE, RESPONSE, ERROR, MESSAGE, MESSAGE_TEXT
-from common.utils import get_message, send_message
+from common.variables import ACTION, PRESENCE, TIME, USER, ACCOUNT_NAME, \
+    RESPONSE, ERROR, DEFAULT_IP_ADDRESS, DEFAULT_PORT, MESSAGE, MESSAGE_TEXT, SENDER
 from errors import ReqFieldMissingError, ServerError
+from common.utils import get_message, send_message
 
 
 LOGGER_CLIENT = logging.getLogger('messenger.client')
@@ -21,6 +21,7 @@ def message_from_server(message):
     """Функция - обработчик сообщений других пользователей, поступающих с сервера"""
     if ACTION in message and message[ACTION] == MESSAGE and \
             SENDER in message and MESSAGE_TEXT in message:
+        print(f'Получено сообщение от пользователя {message[SENDER]}:\n{message[MESSAGE_TEXT]}')
         LOGGER_CLIENT.info(f'Получено сообщение от пользователя {message[SENDER]}:\n{message[MESSAGE_TEXT]}')
     else:
         LOGGER_CLIENT.error(f'Получено некорректное сообщение с сервера: {message}')
@@ -106,11 +107,8 @@ def main():
     '''
     server_address, server_port, client_mode = arg_parser()
 
-    LOGGER_CLIENT.info(
-        f'Запущен клиент с парамертами: адрес сервера: {server_address}, '
-        f'порт: {server_port}, режим работы: {client_mode}')
-
-    # Инициализация сокета и сообщение серверу о нашем появлении
+    LOGGER_CLIENT.info(f'Запущен клиент с адресом сервера: {server_address}, '
+                       f'портом: {server_port} и режимом работы: {client_mode}')
     try:
         transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         transport.connect((server_address, server_port))
@@ -129,27 +127,20 @@ def main():
         sys.exit(1)
     except ConnectionRefusedError:
         LOGGER_CLIENT.critical(
-            f'Не удалось подключиться к серверу {server_address}:{server_port}, '
-            f'конечный компьютер отверг запрос на подключение.')
+            f'Не удалось подключиться к серверу {server_address}:{server_port}')
         sys.exit(1)
     else:
-        # Если соединение с сервером установлено корректно,
-        # начинаем обмен с ним, согласно требуемому режиму.
-        # основной цикл прогрммы:
         if client_mode == 'send':
             print('Режим работы - отправка сообщений.')
         else:
             print('Режим работы - приём сообщений.')
         while True:
-            # режим работы - отправка сообщений
             if client_mode == 'send':
                 try:
                     send_message(transport, create_message(transport))
                 except (ConnectionResetError, ConnectionError, ConnectionAbortedError):
                     LOGGER_CLIENT.error(f'Соединение с сервером {server_address} было потеряно.')
                     sys.exit(1)
-
-            # Режим работы приём:
             if client_mode == 'listen':
                 try:
                     message_from_server(get_message(transport))
